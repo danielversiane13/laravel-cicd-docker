@@ -42,6 +42,7 @@ jobs:
           php artisan test --without-tty
 
   build-and-push-docker-image:
+    needs: run-tests
     runs-on: ubuntu-latest
 
     steps:
