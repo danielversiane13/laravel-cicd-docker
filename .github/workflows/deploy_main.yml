@@ -55,9 +55,8 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Preparate Build
-        run: |
-          echo ${{ secrets.APP_ENV_PROD }} > .env
+      - name: Make .env
+        run: touch .env && echo -e ${{ secrets.APP_ENV_PROD }} > .env
 
       - name: Build and push
         uses: docker/build-push-action@v2
