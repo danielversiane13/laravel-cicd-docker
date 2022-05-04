@@ -58,7 +58,7 @@ jobs:
       - name: Make .env
         env:
           SECRET_ENV: ${{ secrets.APP_ENV_PROD }}
-        run: touch .env && echo "$env:SECRET_ENV" > .env
+        run: touch .env && echo "$SECRET_ENV" > .env
 
       - name: Build and push
         uses: docker/build-push-action@v2
