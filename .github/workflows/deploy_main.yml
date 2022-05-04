@@ -42,7 +42,6 @@ jobs:
           php artisan test --without-tty
 
   build-and-push-docker-image:
-    name: Build Docker image and push to repositories
     runs-on: ubuntu-latest
 
     steps:
@@ -64,8 +63,5 @@ jobs:
         with:
           context: ./
           file: ./.docker/production/app.Dockerfile
-          builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/laravel-cicd-docker:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/laravel-cicd-docker:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/laravel-cicd-docker:buildcache,mode=max
