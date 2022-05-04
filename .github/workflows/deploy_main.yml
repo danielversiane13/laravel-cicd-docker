@@ -56,7 +56,9 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Make .env
-        run: touch .env && echo -e ${{ secrets.APP_ENV_PROD }} > .env
+        env:
+          SECRET_ENV: ${{ secrets.APP_ENV_PROD }}
+        run: touch .env && echo "$env:SECRET_ENV" > .env
 
       - name: Build and push
         uses: docker/build-push-action@v2
