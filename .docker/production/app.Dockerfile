@@ -12,8 +12,7 @@ COPY . .
 
 RUN composer install --prefer-dist --optimize-autoloader --no-interaction --no-dev
 
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    chmod 777 -R /app/storage/
+RUN chmod 777 -R /app/storage/ && \
+    chmod 777 -R /app/bootstrap/cache/
 
-CMD php -S 0.0.0.0:80 -t public
+ENTRYPOINT [ "./.docker/production/app_entrypoint.sh" ]
