@@ -1,26 +1,19 @@
-#-- Install dependencies --#
-FROM composer:2.0 as build
+FROM composer:2.0 as composer
+FROM php:8.0 as app
 
-COPY . /app
+RUN apt-get update -y && apt-get install -y openssl zip unzip git libxml2 libxml2-dev libpng-dev libzip-dev libonig-dev libsodium-dev nano vim bash-completion iputils*
+RUN docker-php-ext-install pdo pdo_mysql mysqli mbstring soap gd zip xml
 
-RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-#-- Run App --#
-FROM php:8.0-apache-buster as production
+WORKDIR /app
 
-ENV APP_ENV=production
-ENV APP_DEBUG=false
+COPY . .
 
-RUN docker-php-ext-configure opcache --enable-opcache && \
-    docker-php-ext-install pdo pdo_mysql
-
-COPY .docker/production/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
-COPY --from=build /app /var/www/html
-COPY .docker/000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY .env.prod /var/www/html/.env
+RUN composer install --prefer-dist --optimize-autoloader --no-interaction --no-dev
 
 RUN php artisan config:cache && \
     php artisan route:cache && \
-    chmod 777 -R /var/www/html/storage/ && \
-    chown -R www-data:www-data /var/www/ && \
-    a2enmod rewrite
+    chmod 777 -R /app/storage/
+
+CMD php -S 0.0.0.0:80 -t public

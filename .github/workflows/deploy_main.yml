@@ -57,7 +57,7 @@ jobs:
 
       - name: Preparate Build
         run: |
-          echo ${{ secrets.APP_ENV_PROD }} > .env.prod
+          echo ${{ secrets.APP_ENV_PROD }} > .env
 
       - name: Build and push
         uses: docker/build-push-action@v2
