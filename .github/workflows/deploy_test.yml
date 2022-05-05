@@ -1,0 +1,28 @@
+name: AppTest - Deploy
+
+on:
+  push:
+    branches: [test]
+
+jobs:
+  build-and-push-docker-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Make .env
+        env:
+          SECRET_ENV: ${{ secrets.APP_ENV_PROD }}
+        run: touch .env && echo "$SECRET_ENV" > .env
+
+      - uses: azure/docker-login@v1
+        with:
+          login-server: acrbamaqh.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - run: |
+          docker build . -t acrbamaqh.azurecr.io/laravel-cicd-docker:staging
+          docker push acrbamaqh.azurecr.io/laravel-cicd-docker:staging
