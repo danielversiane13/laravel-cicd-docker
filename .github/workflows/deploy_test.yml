@@ -24,5 +24,5 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - run: |
-          docker build . -t acrbamaqh.azurecr.io/laravel-cicd-docker:staging
+          docker build . --file ./.docker/production/app.Dockerfile -t acrbamaqh.azurecr.io/laravel-cicd-docker:staging
           docker push acrbamaqh.azurecr.io/laravel-cicd-docker:staging
