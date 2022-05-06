@@ -20,7 +20,7 @@ jobs:
 
       - name: Build & Push image
         env:
-          APP_NAME: ${{ github.event.repository.name }
+          APP_NAME: ${{ github.event.repository.name }}
         run: |
           docker build . --file ./.docker/production/app.Dockerfile -t "acrbamaqh.azurecr.io/${APP_NAME}:latest"
           docker push "acrbamaqh.azurecr.io/${APP_NAME}:latest"
