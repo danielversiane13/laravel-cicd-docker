@@ -12,17 +12,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # - name: Make .env
-      #   env:
-      #     SECRET_ENV: ${{ secrets.APP_ENV_PROD }}
-      #   run: touch .env && echo "$SECRET_ENV" > .env
-
       - uses: azure/docker-login@v1
         with:
           login-server: acrbamaqh.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
-      - run: |
-          docker build . --file ./.docker/production/app.Dockerfile -t acrbamaqh.azurecr.io/laravel-cicd-docker:staging
-          docker push acrbamaqh.azurecr.io/laravel-cicd-docker:staging
+      - name: Build & Push image
+        env:
+          APP_NAME: ${{ github.event.repository.name }
+        run: |
+          docker build . --file ./.docker/production/app.Dockerfile -t "acrbamaqh.azurecr.io/${APP_NAME}:latest"
+          docker push "acrbamaqh.azurecr.io/${APP_NAME}:latest"
