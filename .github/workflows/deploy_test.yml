@@ -12,10 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Make .env
-        env:
-          SECRET_ENV: ${{ secrets.APP_ENV_PROD }}
-        run: touch .env && echo "$SECRET_ENV" > .env
+      # - name: Make .env
+      #   env:
+      #     SECRET_ENV: ${{ secrets.APP_ENV_PROD }}
+      #   run: touch .env && echo "$SECRET_ENV" > .env
 
       - uses: azure/docker-login@v1
         with:
